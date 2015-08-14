@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>PicPages2 Uploader</title>
+        <link rel="stylesheet" href="css/index.css" type="text/css">
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/AjaxUpload.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </head>
+    <body>
+      <h1>PicPages2 Uploader</h1>
+      <div class="container">
+        <div id="uploader">
+          <form id="upload-form" class="" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="drag-area" dropzone="link">
+              <input type="file" name="file" value="" accept="application/pdf,application/zip,application/rar,application/x-zip-compressed,application/x-rar-compressed">
+              <p class="drag-message">
+                (Drag files here)
+              </p>
+              <div class="buttons">
+                <button id="submit-button" type="submit" name="button">送信</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </body>
+</html>

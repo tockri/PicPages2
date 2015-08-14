@@ -1,0 +1,93 @@
+
+/* Class = "IBUIButton"; normalTitle = "Cancel"; ObjectID = "04C-Jc-p3l"; */
+"04C-Jc-p3l.normalTitle" = "Cancel";
+
+/* Class = "IBUIBarButtonItem"; title = "Make new folder"; ObjectID = "2ig-pR-fuZ"; */
+"2ig-pR-fuZ.title" = "Make new folder";
+
+/* Class = "IBUILabel"; text = "Both codes are not same."; ObjectID = "63j-CA-p6M"; */
+"63j-CA-p6M.text" = "Both codes are not same.";
+
+/* Class = "IBUITextField"; placeholder = "Enter pass code."; ObjectID = "7FZ-Az-Ute"; */
+"7FZ-Az-Ute.placeholder" = "Enter pass code.";
+
+/* Class = "IBUILabel"; text = "(Rightward)"; ObjectID = "Kml-5V-Ddx"; */
+"Kml-5V-Ddx.text" = "(Rightward)";
+
+/* Class = "IBUILabel"; text = "test21"; ObjectID = "LeY-xu-xQ2"; */
+"LeY-xu-xQ2.text" = "test21";
+
+/* Class = "IBUIBarButtonItem"; title = "title"; ObjectID = "RgC-cE-wl3"; */
+"RgC-cE-wl3.title" = "title";
+
+/* Class = "IBUILabel"; text = "Pass code is not valid."; ObjectID = "VbP-m6-7Zm"; */
+"VbP-m6-7Zm.text" = "Pass code is not valid.";
+
+/* Class = "IBUITextField"; placeholder = "pass code"; ObjectID = "VkA-Mv-Ggh"; */
+"VkA-Mv-Ggh.placeholder" = "pass code";
+
+/* Class = "IBUISegmentedControl"; Vu1-kS-k8u.segmentTitles[0] = "Left"; ObjectID = "Vu1-kS-k8u"; */
+"Vu1-kS-k8u.segmentTitles[0]" = "Left";
+
+/* Class = "IBUISegmentedControl"; Vu1-kS-k8u.segmentTitles[1] = "Inerit"; ObjectID = "Vu1-kS-k8u"; */
+"Vu1-kS-k8u.segmentTitles[1]" = "Inerit";
+
+/* Class = "IBUISegmentedControl"; Vu1-kS-k8u.segmentTitles[2] = "Right"; ObjectID = "Vu1-kS-k8u"; */
+"Vu1-kS-k8u.segmentTitles[2]" = "Right";
+
+/* Class = "IBUILabel"; text = "Pass code"; ObjectID = "W3b-rT-eF1"; */
+"W3b-rT-eF1.text" = "Pass code";
+
+/* Class = "IBUILabel"; text = "Remember login"; ObjectID = "WHi-jL-OUL"; */
+"WHi-jL-OUL.text" = "Remember login";
+
+/* Class = "IBUILabel"; text = "Needs login"; ObjectID = "WZ0-PA-CbZ"; */
+"WZ0-PA-CbZ.text" = "Needs login";
+
+/* Class = "IBUITextField"; placeholder = "confirmation"; ObjectID = "Wpc-Io-OP8"; */
+"Wpc-Io-OP8.placeholder" = "confirmation";
+
+/* Class = "IBUILabel"; text = "Edit Folder"; ObjectID = "agq-lv-kus"; */
+"agq-lv-kus.text" = "Edit Folder";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "as8-Jm-spx"; */
+"as8-Jm-spx.text" = "Label";
+
+/* Class = "IBUIBarButtonItem"; title = "FolderTitle"; ObjectID = "fIA-Kr-1lJ"; */
+"fIA-Kr-1lJ.title" = "FolderTitle";
+
+/* Class = "IBUILabel"; text = "(Leftward)"; ObjectID = "fQR-FX-WCd"; */
+"fQR-FX-WCd.text" = "(Leftward)";
+
+/* Class = "IBUIButton"; normalTitle = "Save"; ObjectID = "g0k-qq-vOu"; */
+"g0k-qq-vOu.normalTitle" = "Save";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "hR3-a9-CeO"; */
+"hR3-a9-CeO.text" = "Label";
+
+/* Class = "IBUIButton"; normalTitle = "Cancel"; ObjectID = "hp7-VP-hKH"; */
+"hp7-VP-hKH.normalTitle" = "Cancel";
+
+/* Class = "IBUILabel"; text = "Notice!! If you forget the pass code, you can never login."; ObjectID = "iST-f6-5x8"; */
+"iST-f6-5x8.text" = "Notice!! If you forget the pass code, you can never login.";
+
+/* Class = "IBUILabel"; text = "Page orientation"; ObjectID = "mW0-dt-AAg"; */
+"mW0-dt-AAg.text" = "Page orientation";
+
+/* Class = "IBUIButton"; normalTitle = "Login"; ObjectID = "mcb-Ic-Qck"; */
+"mcb-Ic-Qck.normalTitle" = "Login";
+
+/* Class = "IBUILabel"; text = "Configuration"; ObjectID = "oBb-sz-cXV"; */
+"oBb-sz-cXV.text" = "Configuration";
+
+/* Class = "IBUILabel"; text = "Login settings"; ObjectID = "oMU-le-rYV"; */
+"oMU-le-rYV.text" = "Login settings";
+
+/* Class = "IBUILabel"; text = "Set pass code"; ObjectID = "raL-6O-TSU"; */
+"raL-6O-TSU.text" = "Set pass code";
+
+/* Class = "IBUIButton"; normalTitle = "Close"; ObjectID = "zPn-4C-t87"; */
+"zPn-4C-t87.normalTitle" = "Close";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "zVo-kb-mwS"; */
+"zVo-kb-mwS.text" = "Title";

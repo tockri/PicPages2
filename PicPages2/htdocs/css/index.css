@@ -1,0 +1,79 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+* {
+  font-size: 11pt;
+}
+h1 {
+  margin: 0;
+  padding: 20px;
+  background-color: #eeffcc;
+  font-size: 16pt;
+}
+.container {
+  padding: 20px;
+}
+.container p {
+  margin: 0 0 1em 0;
+}
+.drag-area {
+  border: 1px solid #aaccff;
+  border-radius: 4px;
+  background-color: #ddf0ff;
+  padding: 20px 40px;
+  position: relative;
+  min-height: 80px;
+}
+.drag-area.hover {
+  border-color: #ffccaa;
+  background-color: #fff0dd;
+}
+.drag-area.disabled {
+  border-color: #ccc;
+  background-color: #e0e0e0;
+}
+p.drag-message {
+  display: none;
+}
+.drag-area p.drag-message {
+  display: block;
+  position: absolute;
+  width: 200px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -100px;
+}
+
+#upload-form .buttons {
+  margin-top: 40px;
+  text-align: right;
+}
+#upload-form .drag-area .buttons {
+  display: none;
+}
+#submit-button {
+  padding: 8px 20px;
+  border: 1px solid gray;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+.ajaxupload-progress {
+  font-size: small;
+  margin: 2px 10px;
+  border: 1px solid gray;
+}
+.ajaxupload-progress .ajaxupload-proginfo {
+  display: inline-block;
+  margin-left: 1em;
+}
+.ajaxupload-progress .ajaxupload-progbar {
+  font-size: 1px;
+  line-height: 1px;
+  width: 0;
+  height: 2px;
+  background-color: #4444aa;
+}

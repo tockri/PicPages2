@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  PicPages
+
+  Created by 藤田正訓 on 2015/01/27.
+  Copyright (c) 2015年 tkr. All rights reserved.
+*/
+
+"Logined" = "ログイン中";
+"Logout" = "ログアウト";
+"Set pass code" = "パスコード変更";
+"Preference" = "設定変更";
+"Cancel" = "キャンセル";
+"Make new folder" = "新規フォルダ作成";
+"Folder name" = "フォルダ名";
+"Are you sure to delete?" = "削除してよろしいですか？";
+"Jumped to prev book." = "前の本に移動しました。";
+"Jumped to next book." = "次の本に移動しました。";
+"WebServer is not started.  Connect LAN please." = "サーバーは開始できません。LANに接続してください。";

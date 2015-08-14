@@ -1,0 +1,101 @@
+
+/* Class = "IBUIButton"; normalTitle = "Cancel"; ObjectID = "04C-Jc-p3l"; */
+"04C-Jc-p3l.normalTitle" = "キャンセル";
+
+/* Class = "IBUIBarButtonItem"; title = "Make new folder"; ObjectID = "2ig-pR-fuZ"; */
+"2ig-pR-fuZ.title" = "新規フォルダ";
+
+/* Class = "IBUILabel"; text = "Both codes are not same."; ObjectID = "63j-CA-p6M"; */
+"63j-CA-p6M.text" = "パスワードが一致しません。";
+
+/* Class = "IBUITextField"; placeholder = "Enter pass code."; ObjectID = "7FZ-Az-Ute"; */
+"7FZ-Az-Ute.placeholder" = "パスワードを入力してください。";
+
+/* Class = "IBUILabel"; text = "(Rightward)"; ObjectID = "Kml-5V-Ddx"; */
+"Kml-5V-Ddx.text" = "(右めくり)";
+
+/* Class = "IBUILabel"; text = "Testtttt"; ObjectID = "R1o-sn-ruQ"; */
+"R1o-sn-ruQ.text" = "";
+
+/* Class = "IBUIBarButtonItem"; title = "title"; ObjectID = "RgC-cE-wl3"; */
+"RgC-cE-wl3.title" = "タイトル";
+
+/* Class = "IBUILabel"; text = "Pass code is not valid."; ObjectID = "VbP-m6-7Zm"; */
+"VbP-m6-7Zm.text" = "パスワードが正しくありません。";
+
+/* Class = "IBUITextField"; placeholder = "pass code"; ObjectID = "VkA-Mv-Ggh"; */
+"VkA-Mv-Ggh.placeholder" = "パスワード";
+
+/* Class = "IBUISegmentedControl"; Vu1-kS-k8u.segmentTitles[0] = "Left"; ObjectID = "Vu1-kS-k8u"; */
+"Vu1-kS-k8u.segmentTitles[0]" = "左めくり";
+
+/* Class = "IBUISegmentedControl"; Vu1-kS-k8u.segmentTitles[1] = "Inerit"; ObjectID = "Vu1-kS-k8u"; */
+"Vu1-kS-k8u.segmentTitles[1]" = "指定なし";
+
+/* Class = "IBUISegmentedControl"; Vu1-kS-k8u.segmentTitles[2] = "Right"; ObjectID = "Vu1-kS-k8u"; */
+"Vu1-kS-k8u.segmentTitles[2]" = "右めくり";
+
+/* Class = "IBUILabel"; text = "Pass code"; ObjectID = "W3b-rT-eF1"; */
+"W3b-rT-eF1.text" = "パスワード";
+
+/* Class = "IBUILabel"; text = "Remember login"; ObjectID = "WHi-jL-OUL"; */
+"WHi-jL-OUL.text" = "アプリ終了時にログアウトしない";
+
+/* Class = "IBUILabel"; text = "Needs login"; ObjectID = "WZ0-PA-CbZ"; */
+"WZ0-PA-CbZ.text" = "ログイン必要";
+
+/* Class = "IBUITextField"; placeholder = "confirmation"; ObjectID = "Wpc-Io-OP8"; */
+"Wpc-Io-OP8.placeholder" = "確認";
+
+/* Class = "IBUILabel"; text = "Edit Folder"; ObjectID = "agq-lv-kus"; */
+"agq-lv-kus.text" = "フォルダの編集";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "as8-Jm-spx"; */
+"as8-Jm-spx.text" = "";
+
+/* Class = "IBUIBarButtonItem"; title = "FolderTitle"; ObjectID = "fIA-Kr-1lJ"; */
+"fIA-Kr-1lJ.title" = "フォルダタイトル";
+
+/* Class = "IBUILabel"; text = "(Leftward)"; ObjectID = "fQR-FX-WCd"; */
+"fQR-FX-WCd.text" = "(左めくり)";
+
+/* Class = "IBUIButton"; normalTitle = "Save"; ObjectID = "g0k-qq-vOu"; */
+"g0k-qq-vOu.normalTitle" = "保存";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "hR3-a9-CeO"; */
+"hR3-a9-CeO.text" = "Label";
+
+/* Class = "IBUIButton"; normalTitle = "Cancel"; ObjectID = "hp7-VP-hKH"; */
+"hp7-VP-hKH.normalTitle" = "キャンセル";
+
+/* Class = "IBUILabel"; text = "Notice!! If you forget the pass code, you can never login."; ObjectID = "iST-f6-5x8"; */
+"iST-f6-5x8.text" = "※注意！パスワードを忘れるとログインする方法はありません。";
+
+/* Class = "IBUILabel"; text = "Page orientation"; ObjectID = "mW0-dt-AAg"; */
+"mW0-dt-AAg.text" = "ページめくり";
+
+/* Class = "IBUIButton"; normalTitle = "Login"; ObjectID = "mcb-Ic-Qck"; */
+"mcb-Ic-Qck.normalTitle" = "ログイン";
+
+/* Class = "IBUILabel"; text = "Configuration"; ObjectID = "oBb-sz-cXV"; */
+"oBb-sz-cXV.text" = "フォルダ設定";
+
+/* Class = "IBUILabel"; text = "Login settings"; ObjectID = "oMU-le-rYV"; */
+"oMU-le-rYV.text" = "ログイン設定";
+
+/* Class = "IBUILabel"; text = "Set pass code"; ObjectID = "raL-6O-TSU"; */
+"raL-6O-TSU.text" = "パスワードを設定してください。";
+
+/* Class = "IBUIButton"; normalTitle = "Close"; ObjectID = "zPn-4C-t87"; */
+"zPn-4C-t87.normalTitle" = "閉じる";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "zVo-kb-mwS"; */
+"zVo-kb-mwS.text" = "タイトル";
+
+/* フォルダ選択ダイアログタイトル */
+"AfC-AJ-HaI.text" = "移動先を選択してください。";
+
+"rKD-g5-U7u.normalTitle" = "キャンセル";
+
+/* WebServerPane */
+"DBr-Dk-FBt.text" = "PCのブラウザからアクセスしてファイルをアップロードしてください。";
