@@ -13,9 +13,9 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     // MARK: - items
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var controlPanel: UIView!
-    @IBOutlet weak var titleItem: UIBarButtonItem!
     @IBOutlet weak var pageLabel: UILabel!
     
+    @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var leftButton: UIButton!
     
@@ -59,13 +59,16 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     // MARK: - private methods
     
     /**
-    タイトルバーを更新する
+    タイトルバーとスライダーの色を更新する
     */
     private func updateViews() {
-        titleItem.title = folder.name
+        titleLabel.text = folder.name
         pageCount = bookPane.folder.pageCount
-        slider.hidden = true
+
         slider.maximumValue = Float(pageCount)
+        sliderPage = bookPane.currentPage
+        
+
         if (bookPane.folder.isLeftward) {
             slider.minimumTrackTintColor = UIColor.whiteColor()
             slider.maximumTrackTintColor = UIColor.orangeColor()
@@ -73,8 +76,7 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
             slider.minimumTrackTintColor = UIColor.orangeColor()
             slider.maximumTrackTintColor = UIColor.whiteColor()
         }
-        sliderPage = bookPane.currentPage
-        slider.hidden = false
+        
     }
     /**
     ページ番号を更新する
@@ -112,7 +114,8 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     */
     @IBAction func left(sender: AnyObject) {
         bookPane.pageLeft(false)
-        updateViews()
+        sliderPage = bookPane.currentPage
+//        updateViews()
     }
 
     /**
@@ -120,7 +123,8 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     */
     @IBAction func right(sender: AnyObject) {
         bookPane.pageRight(false)
-        updateViews()
+        sliderPage = bookPane.currentPage
+//        updateViews()
     }
     
     
