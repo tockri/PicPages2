@@ -12,16 +12,32 @@ import UIKit
 class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewControllerDataSource, UIGestureRecognizerDelegate {
     // タップした場所によってどう振る舞うべきか
     enum TapCondition :Int {
-        case Inherit,
-        ScrollLeft,
+        case Scroll,
         PageLeft,
         Control,
-        ScrollRight,
-        PageRight
+        PageRight,
+        None
+    }
+    /**
+    スクロールする方向
+    */
+    enum ScrollDirection :Int {
+        case Top,
+        LeftTop,
+        RightTop,
+        Left,
+        Right,
+        Bottom,
+        LeftBottom,
+        RightBottom,
+        None
     }
     
     @IBOutlet weak var messageLabel: UILabel!
-    
+    /// シングルタップ
+    @IBOutlet var singleTapGr: UITapGestureRecognizer!
+    /// ダブルタップ
+    @IBOutlet var doubleTapGr: UITapGestureRecognizer!
     // PageViewControllerを貼り付ける場所
     @IBOutlet weak var containerView: UIView!
     // ControlPane
@@ -35,10 +51,14 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
     private var pvc: UIPageViewController!
     // 現在表示している若い方のページ番号
     var currentPage: Int {
-        return currentPagePane?.page ?? 0
+        if (currentPagePane == nil) {
+            return 0
+        } else {
+            return currentPagePane.page
+        }
     }
     // 現在表示しているページのページ番号が若い方
-    var currentPagePane: BookPagePane? {
+    var currentPagePane: BookPagePane! {
         if (folder.isLeftward) {
             return rightPagePane
         } else {
@@ -46,7 +66,7 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
         }
     }
     // 左側のページ
-    private var leftPagePane: BookPagePane? {
+    private var leftPagePane: BookPagePane! {
         var pages = pvc.viewControllers;
         if (pages.count == 1) {
             return pages[0] as? BookPagePane
@@ -57,7 +77,7 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
         }
     }
     // 右側のページ
-    private var rightPagePane: BookPagePane? {
+    private var rightPagePane: BookPagePane! {
         var pages = pvc.viewControllers;
         if (pages.count == 1) {
             return pages[0] as? BookPagePane
@@ -218,26 +238,87 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
     :param: p タップ位置
     :returns: 場所の分類
     */
-    private func calcTapCondition(p: CGPoint) -> TapCondition {
-        if (p.x < view.eWidth * 0.25) {
-            // 左端
-            if (leftPagePane!.remainLeftScroll) {
-                return .ScrollLeft
+    private func calcTapCondition(p: CGPoint) -> (TapCondition, ScrollDirection) {
+        let lx = p.x / view.eWidth
+        let ly = p.y / view.eHeight
+        let rl = leftPagePane.remainLeftScroll
+        let rt = leftPagePane.remainTopScroll
+        let rr = leftPagePane.remainRightScroll
+        let rb = leftPagePane.remainBottomScroll
+        var scr:ScrollDirection = .None
+        var tap: TapCondition = .Scroll
+        if (leftPagePane.isZoomed) {
+            if (lx < 0.3) {
+                if (ly < 0.3) {
+                    if (rl || rt) {
+                        scr = .LeftTop
+                    } else {
+                        tap = .PageLeft
+                    }
+                } else if (ly < 0.7) {
+                    if (rl) {
+                        scr = .Left
+                    } else {
+                        tap = .PageLeft
+                    }
+                } else {
+                    if (rl || rb) {
+                        scr = .LeftBottom
+                    } else {
+                        tap = .PageLeft
+                    }
+                }
+            } else if (lx < 0.7) {
+                if (ly < 0.3) {
+                    scr = .Top
+                } else if (ly < 0.7) {
+                    scr = .None
+                    tap = .Control
+                } else {
+                    scr = .Bottom
+                }
             } else {
-                return .PageLeft
+                if (ly < 0.3) {
+                    if (rr || rt) {
+                        scr = .RightTop
+                    } else {
+                        tap = .PageRight
+                    }
+                } else if (ly < 0.7) {
+                    if (rr) {
+                        scr = .Right
+                    } else {
+                        tap = .PageRight
+                    }
+                } else {
+                    if (rr || rb) {
+                        scr = .RightBottom
+                    } else {
+                        tap = .PageRight
+                    }
+                }
             }
-        } else if (p.x < view.eWidth * 0.75) {
-            // 真ん中
-            return .Control
+            return (tap, scr)
         } else {
-            // 右端
-            if (rightPagePane!.remainRightScroll) {
-                return .ScrollRight
+            if (lx < 0.25) {
+                // 左端
+                if (rl) {
+                    return (.Scroll, .Left)
+                } else {
+                    return (.PageLeft, .None)
+                }
+            } else if (lx > 0.75) {
+                // 右端
+                if (rr) {
+                    return (.Scroll, .Right)
+                } else {
+                    return (.PageRight, .None)
+                }
             } else {
-                return .PageRight
+                // 真ん中
+                return (.Control, .None)
             }
         }
-        
     }
     
     
@@ -354,15 +435,33 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
         setNeedsStatusBarAppearanceUpdate()
     }
     
-    // タップイベント
+    /**
+    ダブルタップイベント
+    :param: gr ゼスチャー
+    */
+    @IBAction func doubleTapped(gr: UITapGestureRecognizer) {
+        Logger.debug(gr, message: "ダブルタップ")
+        if (leftPagePane.isZoomed) {
+            leftPagePane.zoomDown()
+        } else {
+            var p = gr.locationOfTouch(0, inView: view)
+            p.x /= view.eWidth
+            p.y /= view.eHeight
+            leftPagePane.zoomUp(p)
+        }
+    }
+    
+    /**
+    タップイベント
+    :param: gr ゼスチャー
+    */
     @IBAction func tapped(gr: UITapGestureRecognizer) {
-        switch (calcTapCondition(gr.locationOfTouch(0, inView: view))) {
+        let (tap, scroll) = calcTapCondition(gr.locationOfTouch(0, inView: view))
+        switch (tap) {
         case .Control:
             showControl()
-        case .ScrollLeft:
-            leftPagePane?.scrollLeft()
-        case .ScrollRight:
-            rightPagePane?.scrollRight()
+        case .Scroll:
+            leftPagePane.scrollTo(scroll, animated: true)
         case .PageLeft:
             pageLeft(true)
         case .PageRight:
@@ -411,55 +510,84 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
     func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
         return (control == nil)
     }
-    /**
-    <#Description#>
-    
-    :param: gr    <#gr description#>
-    :param: touch <#touch description#>
-    
-    :returns: <#return value description#>
-    */
-    func gestureRecognizer(gr: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        var condition = calcTapCondition(touch.locationInView(view))
-        switch (condition) {
-        case .Control, .ScrollLeft, .ScrollRight:
-            return true
-        default:
-            return true
-        }
-    }
+//    /**
+//    タップ位置によってシングルタップの扱いを判定する
+//    
+//    :param: gr    ゼスチャー
+//    :param: touch タップ位置
+//    
+//    :returns: <#return value description#>
+//    */
+//    func gestureRecognizer(gr: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+//        var condition = calcTapCondition(touch.locationInView(view))
+//        switch (condition) {
+//        case .Control, .ScrollLeft, .ScrollRight:
+//            return true
+//        default:
+//            return true
+//        }
+//    }
     
     // MARK: - PaneBase
     
     
     // MARK: - UIViewController
-    // View初期化
+    
+    /**
+    View初期化
+    */
     override func viewDidLoad() {
+        // ダブルタップゼスチャーが失敗するまでシングルタップ処理をしない
+        singleTapGr.requireGestureRecognizerToFail(doubleTapGr)
     }
     
-    // view表示直前
+    /**
+    view表示直前
+    :param: animated アニメーション
+    */
     override func viewWillAppear(animated: Bool) {
         setNeedsStatusBarAppearanceUpdate()
         makeupPageVieController()
         showPage(folder.lastRead)
     }
-    //
+    /**
+    view表示
+    :param: animated アニメーション
+    */
     override func viewDidAppear(animated: Bool) {
         
     }
-    // ステータスバー非表示
+    /**
+    ステータスバー非表示
+    :returns: Control表示中は表示
+    */
     override func prefersStatusBarHidden() -> Bool {
         return control == nil
     }
+    /**
+    ステータスバー処理
+    :returns: Fade
+    */
     override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
         return UIStatusBarAnimation.Fade
     }
+    /**
+    ステータスバースタイル
+    :returns: Light
+    */
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
     
     // MARK: - UIPageViewControllerDataSource
-    // 前のページを返す
+    
+    
+    /**
+    前のページを返す
+    :param: pageViewController pv
+    :param: viewController     現在
+    :returns: 前のページ
+    */
     func pageViewController(pageViewController: UIPageViewController,
         viewControllerBeforeViewController viewController: UIViewController)
         -> UIViewController?
@@ -467,7 +595,13 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
         var p = viewController as! BookPagePane
         return folder.isLeftward ? nextPage(p) : prevPage(p)
     }
-    // 次のページを返す
+    
+    /**
+    次のページを返す
+    :param: pageViewController pv
+    :param: viewController     現在
+    :returns: 次のページ
+    */
     func pageViewController(pageViewController: UIPageViewController,
         viewControllerAfterViewController viewController: UIViewController)
         -> UIViewController?
@@ -478,6 +612,13 @@ class BookPane : AbstractFolderPane, UIPageViewControllerDelegate, UIPageViewCon
     
     // MARK: - UIPageViewControllerDelegate
     
+    /**
+    ページめくり直後イベント
+    :param: pageViewController      pv
+    :param: finished                アニメーション終わったかどうか
+    :param: previousViewControllers 前のページ
+    :param: completed               終わったかどうか
+    */
     func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [AnyObject], transitionCompleted completed: Bool) {
         if (completed) {
             pageShown()

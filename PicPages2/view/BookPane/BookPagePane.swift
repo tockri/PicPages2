@@ -63,6 +63,21 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
     var remainRightScroll: Bool {
         return scrollView.contentOffset.x < imageView.eWidth - scrollView.eWidth
     }
+    /// 上側にスクロール領域を残している
+    var remainTopScroll: Bool {
+        return scrollView.contentOffset.y > 0
+    }
+    /// 下側にスクロール領域を残している
+    var remainBottomScroll: Bool {
+        return scrollView.contentOffset.y < imageView.eHeight - scrollView.eHeight
+    }
+    
+    
+    /// 拡大表示しているかどうか
+    var isZoomed: Bool {
+        return scrollView.zoomScale > 1
+    }
+    
     // MARK: - private methods
     private func updateLayout() {
         let rw = view.eWidth
@@ -99,9 +114,9 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: imgWidth, height: imgHeight)
         if (_horizScroll) {
             if (left) {
-                scrollLeft(false)
+                scrollTo(.LeftTop, animated: false)
             } else {
-                scrollRight(false)
+                scrollTo(.RightTop, animated: false)
             }
         }
     }
@@ -113,21 +128,46 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
     }
     
     // MARK: - public methods
-    // 左にスクロールする
-    func scrollLeft(_ animated :Bool = true) {
-        if (isWide) {
-            var p = scrollView.contentOffset
+    
+    /**
+    スクロールする
+    :param: scr スクロール方向
+    :param: animated アニメーション
+    */
+    func scrollTo(scr:BookPane.ScrollDirection, animated:Bool = true) {
+        var p = scrollView.contentOffset
+        if (scr == .Left || scr == .LeftTop || scr == .LeftBottom) {
             p.x = 0
-            scrollView.setContentOffset(p, animated: animated)
-        }
-    }
-    // 右にスクロールする
-    func scrollRight(_ animated :Bool = true) {
-        if (isWide) {
-            var p = scrollView.contentOffset
+        } else if (scr == .Right || scr == .RightTop || scr == .RightBottom) {
             p.x = imageView.eWidth - scrollView.eWidth
-            scrollView.setContentOffset(p, animated: animated)
         }
+        if (scr == .Top || scr == .LeftTop || scr == .RightTop) {
+            p.y = 0
+        } else if (scr == .Bottom || scr == .LeftBottom || scr == .RightBottom) {
+            p.y = imageView.eHeight - scrollView.eHeight
+        }
+        scrollView.setContentOffset(p, animated: animated)
+    }
+    
+    /**
+    ズームアップする
+    :param: center 中心座標
+    */
+    func zoomUp(center: CGPoint) {
+        let z = scrollView.maximumZoomScale
+        scrollView.setZoomScale(z, animated: true)
+        
+        var p = CGPoint()
+        p.x = (imageView.eWidth - scrollView.eWidth) * center.x
+        p.y = (imageView.eHeight - scrollView.eHeight) * center.y
+        scrollView.setContentOffset(p, animated:true)
+    }
+    
+    /**
+    ズームダウンする
+    */
+    func zoomDown() {
+        scrollView.setZoomScale(1, animated: true)
     }
     
     // MARK: - UIViewController
