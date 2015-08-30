@@ -57,6 +57,6 @@ class Logger {
         prefix: String = "")
     {
         var fn = file.eFilename
-        println("[\(prefix)]\(message)(\(function) \(fn):\(line)) \(body)")
+        println("[\(prefix)]\(message)(\(function) \(fn):\(line)) \n\(body)")
     }
 }

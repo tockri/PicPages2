@@ -124,7 +124,7 @@ class EG {
 }
 
 // なんでも文字列にする
-func eS(anything: AnyObject) -> String {
+func eS(anything: Any) -> String {
     return "\(anything)"
 }
 // NSLocalizedStringを短縮するエイリアス
