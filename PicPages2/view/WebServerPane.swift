@@ -39,6 +39,7 @@ class WebServerPane: PaneBase {
             }
             let port = server.listeningPort()
             urlLabel.text = "http://\(addr!):\(port)/"
+            UIApplication.sharedApplication().idleTimerDisabled = true
         } else {
             urlLabel.text = eR("WebServer is not started.  Connect LAN please.")
             server = nil
@@ -53,6 +54,7 @@ class WebServerPane: PaneBase {
             server.stop()
             server = nil
         }
+        UIApplication.sharedApplication().idleTimerDisabled = false
     }
     
     // MARK: - public method
