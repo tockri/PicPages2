@@ -67,12 +67,12 @@ extension UIView {
         eResize(width: size.width, height: size.height)
     }
     // サイズ変更
-    func eResize(#width: CGFloat, height: CGFloat) {
+    func eResize(width width: CGFloat, height: CGFloat) {
         let o = self.frame.origin
         self.frame = CGRect(x: o.x, y: o.y, width: width, height: height)
     }
     // 移動
-    func eMove(#x: CGFloat, y: CGFloat) {
+    func eMove(x x: CGFloat, y: CGFloat) {
         let s = self.frame.size
         self.frame = CGRect(x: x, y: y, width: s.width, height: s.height)
     }
@@ -103,9 +103,9 @@ extension UIView {
     }
     // 親のサイズに合わせる
     func eFitToSuperview() {
-        var sv = superview
+        let sv = superview
         if (sv != nil) {
-            var size = sv!.frame.size
+            let size = sv!.frame.size
             frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         }
     }

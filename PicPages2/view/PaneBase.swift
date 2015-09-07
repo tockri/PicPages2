@@ -18,18 +18,18 @@ class PaneBase: UIViewController {
     
     /**
     新しいViewControllerをFadeinで重ねて表示する
-    :param: identifier StoryboardのIdentifier
-    :param: onView 表示するview
-    :param: complete Fadein完了時に呼ばれるクロージャ
-    :returns: 子ViewControllerを返す
+    - parameter identifier: StoryboardのIdentifier
+    - parameter onView: 表示するview
+    - parameter complete: Fadein完了時に呼ばれるクロージャ
+    - returns: 子ViewControllerを返す
     */
     func showCoverViewController(identifier: String, onView: UIView? = nil, complete:(PaneBase) -> Void = {_ in}) -> PaneBase {
-        var cp = storyboard?.instantiateViewControllerWithIdentifier(identifier) as! PaneBase
+        let cp = storyboard?.instantiateViewControllerWithIdentifier(identifier) as! PaneBase
         addChildViewController(cp)
         cp.view.hidden = true
         (onView ?? view).addSubview(cp.view)
         cp.view.eFitToSuperview()
-        cp.view.eFadein(complete: {
+        cp.view.eFadein({
             complete(cp)
         })
         cp.covering = true
@@ -41,7 +41,7 @@ class PaneBase: UIViewController {
     */
     @IBAction func dismissCoveringViewController() {
         if (covering) {
-            view.eFadeout(complete: {
+            view.eFadeout({
                 let p = self.parentViewController as? PaneBase
                 p?.coveredViewControllerWillDismiss(self)
                 self.view.removeFromSuperview()
@@ -52,7 +52,7 @@ class PaneBase: UIViewController {
     /**
     showCoverViewControllerで表示した子ViewControllerがdismissCoveringViewControllerで
     非表示になった時呼ばれる
-    :param: viewController 子ViewController
+    - parameter viewController: 子ViewController
     */
     func coveredViewControllerWillDismiss(viewController:PaneBase) {
         

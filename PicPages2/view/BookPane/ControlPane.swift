@@ -68,13 +68,19 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
         slider.maximumValue = Float(pageCount)
         sliderPage = bookPane.currentPage
         
+        let min = UIColor.whiteColor()
+        let max = UIColor.orangeColor()
 
         if (bookPane.folder.isLeftward) {
-            slider.minimumTrackTintColor = UIColor.whiteColor()
-            slider.maximumTrackTintColor = UIColor.orangeColor()
+            if (slider.minimumTrackTintColor != min) {
+                slider.minimumTrackTintColor = min
+                slider.maximumTrackTintColor = max
+            }
         } else {
-            slider.minimumTrackTintColor = UIColor.orangeColor()
-            slider.maximumTrackTintColor = UIColor.whiteColor()
+            if (slider.minimumTrackTintColor != max) {
+                slider.minimumTrackTintColor = max
+                slider.maximumTrackTintColor = min
+            }
         }
         
     }
@@ -99,7 +105,6 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     @IBAction func up(sender: AnyObject) {
         bookPane.goPrev()
         updateViews()
-//        updatePageLabel()
     }
     /**
     次の本
@@ -107,7 +112,6 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     @IBAction func down(sender: AnyObject) {
         bookPane.goNext()
         updateViews()
-//        updatePageLabel()
     }
     /**
     左のページ
@@ -115,7 +119,7 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     @IBAction func left(sender: AnyObject) {
         bookPane.pageLeft(false)
         sliderPage = bookPane.currentPage
-//        updateViews()
+        updateViews()
     }
 
     /**
@@ -124,7 +128,7 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     @IBAction func right(sender: AnyObject) {
         bookPane.pageRight(false)
         sliderPage = bookPane.currentPage
-//        updateViews()
+        updateViews()
     }
     
     
@@ -136,7 +140,7 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     }
     /**
     スライダーの値が変わったイベント
-    :param: sender スライダー
+    - parameter sender: スライダー
     */
     @IBAction func sliderChanged(sender:AnyObject) {
         let rv = roundf(slider.value)
@@ -172,7 +176,7 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     
     /**
     スライダーによりページ変更
-    :param: t タイマー
+    - parameter t: タイマー
     */
     func sliderTimerUpdated(t:NSTimer) {
         if (t == timer) {
@@ -183,9 +187,14 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
         }
     }
     
-    
+    /**
+    タップ領域の判定
+    :param: gestureRecognizer ゼスチャー
+    :param: touch             タッチ
+    :returns: controlPanel上は無視
+    */
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        if (touch.view.isDescendantOfView(controlPanel)) {
+        if (touch.view!.isDescendantOfView(controlPanel)) {
             return false
         }
         return true
@@ -203,7 +212,11 @@ class ControlPane: PaneBase, UIGestureRecognizerDelegate {
     override func viewWillAppear(animated: Bool) {
         updateViews()
     }
-    
+    /**
+    画面遷移の準備
+    :param: segue  セグエ
+    :param: sender
+    */
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         switch (segue.identifier!) {
         case "Config":

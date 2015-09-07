@@ -49,7 +49,7 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
     // 横長画像を表示している
     var isWide: Bool {
         if (image != nil) {
-            var sz = image.size
+            let sz = image.size
             return sz.height < sz.width
         } else {
             return false
@@ -131,8 +131,8 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
     
     /**
     スクロールする
-    :param: scr スクロール方向
-    :param: animated アニメーション
+    - parameter scr: スクロール方向
+    - parameter animated: アニメーション
     */
     func scrollTo(scr:BookPane.ScrollDirection, animated:Bool = true) {
         var p = scrollView.contentOffset
@@ -151,7 +151,7 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
     
     /**
     ズームアップする
-    :param: center 中心座標
+    - parameter center: 中心座標
     */
     func zoomUp(center: CGPoint) {
         let z = scrollView.maximumZoomScale
@@ -173,7 +173,7 @@ class BookPagePane: PaneBase, UIScrollViewDelegate {
     // MARK: - UIViewController
     override func viewDidLoad() {
         automaticallyAdjustsScrollViewInsets = false
-        scrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         imageView = UIImageView(image: image)
         imageView.contentMode = UIViewContentMode.ScaleAspectFit

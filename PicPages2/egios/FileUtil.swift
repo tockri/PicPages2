@@ -42,7 +42,13 @@ class FileUtil: NSObject {
     /// ディレクトリのファイル一覧を返す
     class func files(path: String) -> [String] {
         var err : NSError?
-        var cont = fm.contentsOfDirectoryAtPath(path, error: &err)
+        var cont: [AnyObject]?
+        do {
+            cont = try fm.contentsOfDirectoryAtPath(path)
+        } catch let error as NSError {
+            err = error
+            cont = nil
+        }
         var ret :[String] = []
         if (err == nil) {
             for c in cont! {
@@ -66,7 +72,13 @@ class FileUtil: NSObject {
     /// ファイルタイプを返す
     class func fileType(path:String) -> String? {
         var err: NSError?
-        let attrs:NSDictionary? = fm.attributesOfItemAtPath(path, error: &err)
+        let attrs:NSDictionary?
+        do {
+            attrs = try fm.attributesOfItemAtPath(path)
+        } catch let error as NSError {
+            err = error
+            attrs = nil
+        }
         if (err == nil) {
             return attrs?.fileType()
         } else {
@@ -84,7 +96,14 @@ class FileUtil: NSObject {
     // ファイルまたはディレクトリ削除
     class func rm(path : String) -> Bool {
         var err : NSError?
-        let result = fm.removeItemAtPath(path, error: &err)
+        let result: Bool
+        do {
+            try fm.removeItemAtPath(path)
+            result = true
+        } catch let error as NSError {
+            err = error
+            result = false
+        }
         if (!result) {
             Logger.warn(err)
         } else {
@@ -99,10 +118,16 @@ class FileUtil: NSObject {
             return true
         }
         var err : NSError?
-        let result = fm.createDirectoryAtPath(path,
-            withIntermediateDirectories:true,
-            attributes:nil,
-            error:&err)
+        let result: Bool
+        do {
+            try fm.createDirectoryAtPath(path,
+                        withIntermediateDirectories:true,
+                        attributes:nil)
+            result = true
+        } catch let error as NSError {
+            err = error
+            result = false
+        }
         if (!result) {
             Logger.warn(err)
         } else {
@@ -124,13 +149,12 @@ class FileUtil: NSObject {
     
     /**
     ファイル移動
-    :param: src 移動元
-    :param: dst 移動先
+    - parameter src: 移動元
+    - parameter dst: 移動先
     
-    :returns: 移動成功したらtrue
+    - returns: 移動成功したらtrue
     */
     class func mv(src : String, to dst : String) -> Bool {
-        var err: NSError?
         var isDir: ObjCBool = ObjCBool(false)
         var dstPath = dst
         if (fm.fileExistsAtPath(dst, isDirectory:&isDir)) {
@@ -138,37 +162,39 @@ class FileUtil: NSObject {
                 dstPath = dst.eAddPath(src.eFilename)
             } else {
                 // ファイルが存在する場合削除する
-                if (!fm.removeItemAtPath(dst, error:&err)) {
+                do {
+                    try fm.removeItemAtPath(dst)
+                } catch let err as NSError {
                     Logger.warn(err)
                     return false
                 }
             }
         }
         // 親ディレクトリを作成
-        var dir = dstPath.eDirname
+        let dir = dstPath.eDirname
         if (!self.mkdir(dir)) {
             return false
         }
         // コピー
-        if (!fm.moveItemAtPath(src, toPath: dstPath, error: &err)) {
+        do {
+            try fm.moveItemAtPath(src, toPath: dstPath)
+            Logger.debug("moved : " + src + " to " + dstPath)
+            return true
+        } catch let err as NSError {
             Logger.warn(err)
             return false
-        } else {
-            Logger.debug("moved : " + src + " to " + dstPath)
         }
-        return true
     }
     
     /**
     ファイルコピー
     
-    :param: src 移動元
-    :param: dst 移動先
+    - parameter src: 移動元
+    - parameter dst: 移動先
     
-    :returns: 移動成功したらtrue
+    - returns: 移動成功したらtrue
     */
     class func copy(src : String, to dst : String) -> Bool {
-        var err : NSError?
         var isDir : ObjCBool = ObjCBool(false)
         var dstPath = dst
         if (fm.fileExistsAtPath(dst, isDirectory:&isDir)) {
@@ -176,25 +202,28 @@ class FileUtil: NSObject {
                 dstPath = dst.eAddPath(src.eFilename)
             } else {
                 // ファイルが存在する場合削除する
-                if (!fm.removeItemAtPath(dst, error:&err)) {
+                do {
+                    try fm.removeItemAtPath(dst)
+                } catch let err as NSError {
                     Logger.warn(err)
                     return false
                 }
             }
         }
         // 親ディレクトリを作成
-        var dir = dstPath.eDirname
+        let dir = dstPath.eDirname
         if (!self.mkdir(dir)) {
             return false
         }
         // コピー
-        if (!fm.copyItemAtPath(src, toPath:dstPath, error:&err)) {
+        do {
+            try fm.copyItemAtPath(src, toPath:dstPath)
+            Logger.debug("copied : " + src + " to " + dstPath)
+            return true
+        } catch let err as NSError {
             Logger.warn(err)
             return false
-        } else {
-            Logger.debug("copied : " + src + " to " + dstPath)
         }
-        return true
     }
     
     

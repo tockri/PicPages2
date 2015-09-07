@@ -17,24 +17,24 @@ class ZipArchiver: Archiver {
     アーカイブを展開する
     */
     override func extract() -> Bool {
-        var err:NSError? = nil
         let filePath = folder.realPath!.eAddPath(folder.originalName!)
         let encodings = [NSShiftJISStringEncoding, NSUTF8StringEncoding, NSJapaneseEUCStringEncoding]
         for enc in encodings {
             let options:[String:AnyObject] = [
                 ZZOpenOptionsEncodingKey:enc
             ]
-            let za = ZZArchive(URL: NSURL(fileURLWithPath: filePath), options: options, error: &err)
-            if (err != nil) {
+            do {
+                let za = try ZZArchive(URL: NSURL(fileURLWithPath: filePath), options: options)
+                let tree = inspect(za)
+                if (tree != nil && tree!.count > 0) {
+                    makeup(tree!)
+                    // 成功したらzipファイルだけ削除する
+                    FileUtil.rm(filePath)
+                    return true
+                }
+            } catch let err as NSError {
                 Logger.warn(err, message: "zip展開エラー")
                 return false
-            }
-            let tree = inspect(za)
-            if (tree != nil && tree!.count > 0) {
-                makeup(tree!)
-                // 成功したらzipファイルだけ削除する
-                FileUtil.rm(filePath)
-                return true
             }
         }
         return false
@@ -42,7 +42,7 @@ class ZipArchiver: Archiver {
     
     /**
     アーカイブを検査する
-    :returns: ディレクトリ構成
+    - returns: ディレクトリ構成
     */
     private func inspect(za:ZZArchive) -> [String:[String:ZZArchiveEntry]]? {
         let entries = za.entries
@@ -69,10 +69,10 @@ class ZipArchiver: Archiver {
     
     /**
     Folderをセットする
-    :param: tree アーカイブの中身
+    - parameter tree: アーカイブの中身
     */
     private func makeup(tree:[String:[String:ZZArchiveEntry]]) {
-        let dirs = tree.keys.array
+        let dirs = Array(tree.keys)
         if (dirs.count == 1) {
             makeupBook(folder, dir: dirs[0], entries: tree[dirs[0]]!)
         } else {
@@ -89,9 +89,9 @@ class ZipArchiver: Archiver {
     
     /**
     Folder1つ分の処理
-    :param: folder  フォルダ
-    :param: dir     フォルダ名
-    :param: entries zip内容
+    - parameter folder:  フォルダ
+    - parameter dir:     フォルダ名
+    - parameter entries: zip内容
     */
     private func makeupBook(f:Folder, dir:String, entries:[String:ZZArchiveEntry]) {
         f.isBook = true
@@ -101,20 +101,19 @@ class ZipArchiver: Archiver {
         }
         var page:Int = 1
         var fns = Array(entries.keys)
-        sort(&fns)
+        fns.sortInPlace()
         for fn in fns {
             autoreleasepool({ () -> () in
                 let e = entries[fn]!
                 let dstPath = folder.realPath!.eAddPath(String(format: "%05d", page))
-                var err:NSError? = nil
-                let data:NSData = e.newDataWithError(&err)
-                if (err == nil) {
+                do {
+                    let data:NSData = try e.newData()
                     if (FileUtil.exists(dstPath)) {
                         FileUtil.rm(dstPath)
                     }
                     data.writeToFile(dstPath, atomically: true)
                     page++
-                } else {
+                } catch let err as NSError {
                     Logger.warn(err, message: "ZIP Entryの保存でエラー")
                 }
             })

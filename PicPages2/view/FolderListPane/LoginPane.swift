@@ -19,7 +19,7 @@ class LoginPane: PaneBase {
     @IBAction func submit() {
         errorMessageLabel.hidden = true
         let app = AppDelegate.getInstance()
-        if (app.tryLogin(passText.text)) {
+        if (app.tryLogin(passText.text!)) {
             dismissCoveringViewController()
         } else {
             errorMessageLabel.hidden = false

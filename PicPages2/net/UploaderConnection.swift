@@ -20,9 +20,9 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     /uploadを処理可能にする
-    :param: method HTTPメソッド
-    :param: path   パス
-    :returns: 処理可能
+    - parameter method: HTTPメソッド
+    - parameter path:   パス
+    - returns: 処理可能
     */
     override func supportsMethod(method: String!, atPath path: String!) -> Bool {
         if (path == "/upload" && method == "POST") {
@@ -33,9 +33,9 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     リクエストのBodyを受け取る
-    :param: method HTTPメソッド
-    :param: path   パス
-    :returns: Bodyを受け取る
+    - parameter method: HTTPメソッド
+    - parameter path:   パス
+    - returns: Bodyを受け取る
     */
     override func expectsRequestBodyFromMethod(method: String!, atPath path: String!) -> Bool {
         if (path == "/upload" && method == "POST") {
@@ -46,22 +46,23 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     レスポンスを返す
-    :param: method HTTPメソッド
-    :param: path   パス
-    :returns: レスポンス
+    - parameter method: HTTPメソッド
+    - parameter path:   パス
+    - returns: レスポンス
     */
-    override func httpResponseForMethod(method: String!, URI path: String!) -> NSObject! {
+    override func httpResponseForMethod(method: String!, URI path: String!) -> protocol<NSObjectProtocol, HTTPResponse>! {
         if (path == "/upload" && method == "POST") {
             let message = "OK"
-            var res = HTTPDataResponse(data: message.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true))
+            let res = HTTPDataResponse(data: message.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true))
             return res
         }
-        return super.httpResponseForMethod(method, URI: path)
+        let res = super.httpResponseForMethod(method, URI: path)
+        return res
     }
     
     /**
     Bodyを受け取る前処理
-    :param: contentLength サイズ
+    - parameter contentLength: サイズ
     */
     override func prepareForBodyWithSize(contentLength: UInt64) {
         let contentType = request().headerField("Content-Type")
@@ -80,7 +81,7 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     Bodyを受け取る
-    :param: postDataChunk データ
+    - parameter postDataChunk: データ
     */
     override func processBodyData(postDataChunk: NSData!) {
         if (parser != nil) {
@@ -93,7 +94,7 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     パート開始
-    :param: header ヘッダ
+    - parameter header: ヘッダ
     */
     func processStartOfPartWithHeader(header: MultipartMessageHeader!) {
         let dispField = header.fields["Content-Disposition"] as? MultipartMessageHeaderField
@@ -113,8 +114,8 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     パートデータ
-    :param: data   データ
-    :param: header ヘッダ
+    - parameter data:   データ
+    - parameter header: ヘッダ
     */
     func processContent(data: NSData!, withHeader: MultipartMessageHeader!) {
         if (dstHandle != nil) {
@@ -124,7 +125,7 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     
     /**
     パート終了
-    :param: header ヘッダ
+    - parameter header: ヘッダ
     */
     func processEndOfPartWithHeader(header: MultipartMessageHeader!) {
         if (dstHandle != nil) {
@@ -134,14 +135,14 @@ class UploaderConnection: HTTPConnection, MultipartFormDataParserDelegate {
     }
     /**
     なにもしない
-    :param: data データ
+    - parameter data: データ
     */
     func processPreambleData(data: NSData!) {
         
     }
     /**
     なにもしない
-    :param: data データ
+    - parameter data: データ
     */
     func processEpilogueData(data: NSData!) {
         

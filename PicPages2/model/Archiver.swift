@@ -48,10 +48,10 @@ class Archiver : NSObject {
     }
     /**
     画像ファイルかどうかを返す
-    :param: fileName ファイル名
+    - parameter fileName: ファイル名
     */
     func isImageFile(fileName:String) -> Bool {
         let ext:String = fileName.eExt.lowercaseString
-        return contains(["png", "jpg", "jpeg", "jpe", "gif"], ext)
+        return ["png", "jpg", "jpeg", "jpe", "gif"].contains(ext)
     }
 }

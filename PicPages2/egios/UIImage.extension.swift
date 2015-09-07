@@ -11,15 +11,15 @@ import UIKit
 extension UIImage {
     /**
     高品質リサイズした画像を返す
-    :param: size サイズ
-    :returns: 新しいUIImageインスタンス
+    - parameter size: サイズ
+    - returns: 新しいUIImageインスタンス
     */
     func eResize(size:CGSize) -> UIImage {
         var ret: UIImage? = nil
         autoreleasepool { () -> () in
             UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale)
-            var context = UIGraphicsGetCurrentContext()
-            CGContextSetInterpolationQuality(context, kCGInterpolationHigh)
+            let context = UIGraphicsGetCurrentContext()
+            CGContextSetInterpolationQuality(context, CGInterpolationQuality.High)
             drawInRect(CGRect(origin: CGPoint(x: 0, y: 0), size: size))
             ret = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext();
@@ -28,12 +28,12 @@ extension UIImage {
     }
     /**
     指定したサイズに収まるようにリサイズした画像を返す
-    :param: size サイズ
-    :returns: 新しいUIImageインスタンス
+    - parameter size: サイズ
+    - returns: 新しいUIImageインスタンス
     */
     func eResizeIn(size:CGSize) -> UIImage {
         var ss = self.size
-        var mag = min(size.height / ss.height, min(size.width / ss.width, 1.0))
+        let mag = min(size.height / ss.height, min(size.width / ss.width, 1.0))
         if (mag == 1.0) {
             return self
         } else {

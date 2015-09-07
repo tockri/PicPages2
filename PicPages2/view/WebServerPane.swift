@@ -31,15 +31,16 @@ class WebServerPane: PaneBase {
             server.setPort(50000)
             server.setDocumentRoot(EG.resPath("htdocs"))
             server.setConnectionClass(UploaderConnection)
-            var err: NSError? = nil
-            if (!server.start(&err)) {
+            do {
+                try server.start()
+                let port = server.listeningPort()
+                urlLabel.text = "http://\(addr!):\(port)/"
+                UIApplication.sharedApplication().idleTimerDisabled = true
+            } catch let err as NSError {
                 Logger.warn(err, message: "http server failed")
                 urlLabel.text = ""
                 server = nil
             }
-            let port = server.listeningPort()
-            urlLabel.text = "http://\(addr!):\(port)/"
-            UIApplication.sharedApplication().idleTimerDisabled = true
         } else {
             urlLabel.text = eR("WebServer is not started.  Connect LAN please.")
             server = nil

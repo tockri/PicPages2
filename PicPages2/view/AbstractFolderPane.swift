@@ -24,7 +24,7 @@ class AbstractFolderPane: PaneBase {
 
     /**
     Folderが設定されたときに呼ばれる
-    :param: f フォルダ
+    - parameter f: フォルダ
     */
     func onFolderSet(f:Folder) {
     }

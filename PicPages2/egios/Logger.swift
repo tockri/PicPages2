@@ -10,7 +10,7 @@ import UIKit
 
 class Logger {
     // デバッグ用ログ
-    class func debug(_ body: AnyObject! = "",
+    class func debug(body: AnyObject! = "",
         message: String = "",
         function: String = __FUNCTION__,
         file: String = __FILE__,
@@ -21,7 +21,7 @@ class Logger {
         #endif
     }
     // 情報用ログ
-    class func info(_ body: AnyObject! = "",
+    class func info(body: AnyObject! = "",
         message: String = "",
         function: String = __FUNCTION__,
         file: String = __FILE__,
@@ -31,7 +31,7 @@ class Logger {
     }
 
     // 警告用ログ
-    class func warn(_ body: AnyObject! = "",
+    class func warn(body: AnyObject! = "",
         message: String = "",
         function: String = __FUNCTION__,
         file: String = __FILE__,
@@ -40,7 +40,7 @@ class Logger {
         self.log(body, message:message, function:function, file:file, line:line, prefix: "WARN")
     }
     // エラーログ
-    class func error(_ body: AnyObject! = "",
+    class func error(body: AnyObject! = "",
         message: String = "",
         function: String = __FUNCTION__,
         file: String = __FILE__,
@@ -49,14 +49,14 @@ class Logger {
             self.log(body, message:message, function:function, file:file, line:line, prefix: "ERROR")
     }
     
-    private class func log(_ body: AnyObject! = "",
+    private class func log(body: AnyObject! = "",
         message: String = "",
         function: String = __FUNCTION__,
         file: String = __FILE__,
         line: Int = __LINE__,
         prefix: String = "")
     {
-        var fn = file.eFilename
-        println("[\(prefix)]\(message)(\(function) \(fn):\(line)) \n\(body)")
+        let fn = file.eFilename
+        print("[\(prefix)]\(message)(\(function) \(fn):\(line)) \n\(body)", terminator: "")
     }
 }

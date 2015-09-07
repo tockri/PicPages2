@@ -9,7 +9,8 @@
 import UIKit
 
 class LoadingCell: UITableViewCell {
+    
     @IBOutlet weak var label: UILabel!
-   
+    
     @IBOutlet weak var loading: UIActivityIndicatorView!
 }

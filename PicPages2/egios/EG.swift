@@ -12,13 +12,13 @@ import UIKit
 class EG {
     // rootViewControllerを返す
     class func rootViewController() -> UIViewController {
-        var app = UIApplication.sharedApplication()
-        var window = app.keyWindow
+        let app = UIApplication.sharedApplication()
+        let window = app.keyWindow
         return window!.rootViewController!
     }
     // アプリケーションのメインWindowを返す
     class func window() -> UIWindow {
-        return UIApplication.sharedApplication().windows[0] as! UIWindow
+        return UIApplication.sharedApplication().windows[0] 
     }
     // AppDelegateインスタンスを返す
     class func appDelegate() -> UIApplicationDelegate {
@@ -27,7 +27,7 @@ class EG {
     
     // 現在縦置きかどうか
     class func isPortrait() -> Bool {
-        var ori = UIApplication.sharedApplication().statusBarOrientation
+        let ori = UIApplication.sharedApplication().statusBarOrientation
         return (ori == UIInterfaceOrientation.Portrait
             || ori == UIInterfaceOrientation.PortraitUpsideDown)
     }
@@ -69,12 +69,12 @@ class EG {
     }
     // 設定値を返す
     class func configValue(key: String) -> AnyObject? {
-        var cf = configs()
+        let cf = configs()
         return cf.valueForKey(key)
     }
     // 設定値を設定する
     class func setConfigValue(key: String, value: AnyObject?) {
-        var cf = configs()
+        let cf = configs()
         cf.setValue(value, forKey: key)
     }
     // Bool設定値を返す
@@ -83,17 +83,17 @@ class EG {
     }
     // Bool設定値を設定する
     class func setConfigBool(key: String, value: Bool) {
-        var cf = configs()
+        let cf = configs()
         cf.setBool(value, forKey: key)
     }
     // Int設定値を返す
     class func configInt(key: String) -> Int? {
-        var i = configValue(key)?.intValue
+        let i = configValue(key)?.intValue
         return i != nil ? Int(i!) : nil
     }
     // Int設定値を設定する
     class func setConfigInt(key: String, value: Int) {
-        var cf = configs()
+        let cf = configs()
         cf.setInteger(value, forKey: key)
     }
     // OKボタンだけを持つダイアログを表示する
@@ -117,7 +117,7 @@ class EG {
             tf.placeholder = placeholder
             textField = tf
         })
-        alert.addAction(UIAlertAction(title: eR("OK"), style: UIAlertActionStyle.Default, handler: {action in onOK(textField!.text)}))
+        alert.addAction(UIAlertAction(title: eR("OK"), style: UIAlertActionStyle.Default, handler: {action in onOK(textField!.text!)}))
         alert.addAction(UIAlertAction(title: eR("Cancel"), style: UIAlertActionStyle.Cancel, handler: {action in onCancel()}))
         viewController.presentViewController(alert, animated: true, completion: nil)
     }

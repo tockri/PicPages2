@@ -8,6 +8,9 @@
 
 import Foundation
 
+private let SQLITE_TRANSIENT = unsafeBitCast(-1, sqlite3_destructor_type.self)
+
+
 /// SQLite3ラッパー
 public class EGDB: NSObject {
     private let lockObject = NSObject()
@@ -18,14 +21,14 @@ public class EGDB: NSObject {
     
     /**
     コンストラクタ
-    :param: dbName DBファイル名。リソース
-    :param: copyToCache cacheディレクトリにコピーしてから使用する
+    - parameter dbName: DBファイル名。リソース
+    - parameter copyToCache: cacheディレクトリにコピーしてから使用する
     */
     init(dbPath:String, copyTo:String = "") {
         dbFile = dbPath
         copyDbFile = copyTo
         if (!FileUtil.exists(dbFile)) {
-            println("dbPath is not exist:\(dbPath)")
+            print("dbPath is not exist:\(dbPath)", terminator: "")
         }
     }
     /**
@@ -37,7 +40,7 @@ public class EGDB: NSObject {
     
     /**
     DBをオープンする
-    :returns: DBポインタ
+    - returns: DBポインタ
     */
     private func openDb() {
         if (db == nil) {
@@ -59,13 +62,13 @@ public class EGDB: NSObject {
             sqlite3_close_v2(db)
             db = nil
             lastInsertTable = nil
-            println("db successfully closed.")
+            print("db successfully closed.", terminator: "")
         }
     }
     /**
     プリペアドステートメントを生成する
-    :param: sql SQLクエリ
-    :returns: sqlite3_statementポインタ
+    - parameter sql: SQLクエリ
+    - returns: sqlite3_statementポインタ
     */
     private func prepare(db:COpaquePointer, sql:String) -> COpaquePointer {
         var stmt: COpaquePointer = nil
@@ -74,14 +77,14 @@ public class EGDB: NSObject {
             return stmt
         } else {
             sqlite3_finalize(stmt)
-            println("SQLite Error : " + EGDB.errorMessageFromCode(resCode))
+            print("SQLite Error : " + EGDB.errorMessageFromCode(resCode), terminator: "")
             return nil
         }
     }
     /**
     クエリを実行する
-    :param: sql    SQLクエリ
-    :param: params パラメータ
+    - parameter sql:    SQLクエリ
+    - parameter params: パラメータ
     :return: sqlite3_statementポインタ
     */
     private func queryInner(db:COpaquePointer, sql:String, params:[AnyObject?]?) -> COpaquePointer {
@@ -107,20 +110,17 @@ public class EGDB: NSObject {
             } else {
                 vtext = eS(value!)
             }
-            let negativeOne = UnsafeMutablePointer<Int>(bitPattern: -1)
-            let opaquePointer = COpaquePointer(negativeOne)
-            let transient = CFunctionPointer<((UnsafeMutablePointer<()>) -> Void)>(opaquePointer)
-            resCode = sqlite3_bind_text(stmt, idx, vtext, -1, transient)
+            resCode = sqlite3_bind_text(stmt, idx, vtext, -1, SQLITE_TRANSIENT)
         }
         if (resCode != SQLITE_OK) {
-            println("SQLite Error : " + EGDB.errorMessageFromCode(resCode))
+            print("SQLite Error : " + EGDB.errorMessageFromCode(resCode), terminator: "")
         }
     }
     
     /**
     クエリを実行する（更新系）
-    :param: sql    SQL
-    :param: params パラメータ
+    - parameter sql:    SQL
+    - parameter params: パラメータ
     */
     public func query(sql:String, params:[AnyObject?]? = nil, callback:(([String:String?])->Bool)? = nil) {
         objc_sync_enter(lockObject)
@@ -147,7 +147,7 @@ public class EGDB: NSObject {
                 }
             } else {
                 // error
-                println("SQLite Error : " + EGDB.errorMessageFromCode(resCode))
+                print("SQLite Error : " + EGDB.errorMessageFromCode(resCode), terminator: "")
                 next = false
             }
         }
@@ -157,9 +157,9 @@ public class EGDB: NSObject {
     
     /**
     一行分のレコードを返す
-    :param: sql    SQL
-    :param: params パラメータ
-    :returns: レコード。見つからない場合はnil
+    - parameter sql:    SQL
+    - parameter params: パラメータ
+    - returns: レコード。見つからない場合はnil
     */
     public func queryRow(sql:String, params:[AnyObject?]? = nil) -> [String:String?]? {
         var ret:[String:String?]? = nil
@@ -172,9 +172,9 @@ public class EGDB: NSObject {
     
     /**
     複数行のレコードを返す
-    :param: sql    SQL
-    :param: params パラメータ
-    :returns: レコードの配列。見つからない場合は空配列
+    - parameter sql:    SQL
+    - parameter params: パラメータ
+    - returns: レコードの配列。見つからない場合は空配列
     */
     public func queryRecords(sql:String, params:[AnyObject?]? = nil) -> [[String:String?]] {
         var ret = [[String:String?]]()
@@ -186,9 +186,9 @@ public class EGDB: NSObject {
     }
     /**
     一行分のレコードの最初のカラムを返す
-    :param: sql    SQL
-    :param: params パラメータ
-    :returns: レコード。見つからない場合はnil
+    - parameter sql:    SQL
+    - parameter params: パラメータ
+    - returns: レコード。見つからない場合はnil
     */
     public func queryValue(sql:String, params:[AnyObject?]? = nil) -> String? {
         var ret:String? = nil
@@ -200,10 +200,10 @@ public class EGDB: NSObject {
     }
     /**
     全レコードの所定のフィールドを配列で返す
-    :param: sql     SQL
-    :param: params  パラメータ
-    :param: colName 返すカラム名
-    :returns: フィールドの配列
+    - parameter sql:     SQL
+    - parameter params:  パラメータ
+    - parameter colName: 返すカラム名
+    - returns: フィールドの配列
     */
     public func queryColumn(sql:String, colName:String, params:[AnyObject?]? = nil) -> [String] {
         var ret = [String]()
@@ -219,10 +219,10 @@ public class EGDB: NSObject {
     
     /**
     SELECT文を実行して一行ごとにコールバック関数を実行する
-    :param: tableName テーブル名
-    :param: condition 検索条件
-    :param: callback  コールバック
-    :param: order     ORDER BY
+    - parameter tableName: テーブル名
+    - parameter condition: 検索条件
+    - parameter callback:  コールバック
+    - parameter order:     ORDER BY
     */
     public func select(tableName:String, condition:[String:AnyObject?], callback: (([String:String?])->Bool), order:String = "") {
         var params = [AnyObject?]()
@@ -235,10 +235,10 @@ public class EGDB: NSObject {
     
     /**
     最も一般的なSELECT文を作って実行する
-    :param: tableName テーブル名
-    :param: condition 検索条件
-    :param: order     ORDER BY
-    :returns: 検索結果（全レコード）
+    - parameter tableName: テーブル名
+    - parameter condition: 検索条件
+    - parameter order:     ORDER BY
+    - returns: 検索結果（全レコード）
     */
     public func selectRecords(tableName:String, condition:[String:AnyObject?], order:String = "") -> [[String:String?]] {
         var params = [AnyObject?]()
@@ -251,21 +251,21 @@ public class EGDB: NSObject {
     
     /**
     最も一般的なSELECT文を作って実行する
-    :param: tableName テーブル名
-    :param: condition 検索条件
-    :returns: 検索結果（一行）
+    - parameter tableName: テーブル名
+    - parameter condition: 検索条件
+    - returns: 検索結果（一行）
     */
     public func selectRow(tableName:String, condition:[String:AnyObject?]) -> [String:String?]? {
         var params = [AnyObject?]()
-        var sql = "SELECT * FROM `\(tableName)` WHERE " + EGDB.whereCruise(condition, params: &params)
+        let sql = "SELECT * FROM `\(tableName)` WHERE " + EGDB.whereCruise(condition, params: &params)
         return queryRow(sql, params: params)
     }
     
     /**
     UPDATE文を便利に作って実行する
-    :param: table     テーブル名
-    :param: condition 検索条件
-    :param: record    保存するレコード
+    - parameter table:     テーブル名
+    - parameter condition: 検索条件
+    - parameter record:    保存するレコード
     */
     public func update(table:String, condition:[String:AnyObject?], record:[String:AnyObject?]) {
         var sqla = ["UPDATE `\(table)` SET "]
@@ -282,14 +282,14 @@ public class EGDB: NSObject {
         }
         sqla.append(" WHERE ")
         sqla.append(EGDB.whereCruise(condition, params:&params))
-        let sql = join("", sqla)
+        let sql = sqla.joinWithSeparator("")
         query(sql, params: params)
     }
     
     /**
     INSERT文を便利に作って実行する
-    :param: table  テーブル名
-    :param: record 保存するレコード
+    - parameter table:  テーブル名
+    - parameter record: 保存するレコード
     */
     public func insert(table:String, record:[String:AnyObject?]) {
         var params = [AnyObject?]()
@@ -300,27 +300,27 @@ public class EGDB: NSObject {
             values.append("?")
             params.append(value)
         }
-        var sqla = ["INSERT INTO `\(table)` (",
-            join(", ", keys),
+        let sqla = ["INSERT INTO `\(table)` (",
+            keys.joinWithSeparator(", "),
             ") VALUES (",
-            join(", ", values),
+            values.joinWithSeparator(", "),
             ")"
         ]
-        let sql = join("", sqla)
+        let sql = sqla.joinWithSeparator("")
         query(sql, params: params)
         lastInsertTable = table
     }
 
     /**
     DELETE文を便利に作って実行する
-    :param: table     テーブル名
-    :param: condition 検索条件
+    - parameter table:     テーブル名
+    - parameter condition: 検索条件
     */
     public func delete(table:String, condition:[String:AnyObject?]) {
         var sqla = ["DELETE FROM `\(table)` WHERE "]
         var params = [AnyObject?]()
         sqla.append(EGDB.whereCruise(condition, params: &params))
-        let sql = join("", sqla)
+        let sql = sqla.joinWithSeparator("")
         query(sql, params:params)
     }
     /**
@@ -328,7 +328,7 @@ public class EGDB: NSObject {
     */
     public func lastInsertedRow() -> [String:String?]? {
         if (lastInsertTable != nil) {
-            var sql = "SELECT * FROM `\(lastInsertTable!)` WHERE ROWID = last_insert_rowid()"
+            let sql = "SELECT * FROM `\(lastInsertTable!)` WHERE ROWID = last_insert_rowid()"
             return queryRow(sql)
         } else {
             return nil
@@ -337,7 +337,7 @@ public class EGDB: NSObject {
     
     /**
     テーブル名の配列を返す
-    :returns: 全テーブル名
+    - returns: 全テーブル名
     */
     public func existingTables() -> [String] {
         let sql = "SELECT name FROM sqlite_master WHERE type = 'table'"
@@ -345,31 +345,30 @@ public class EGDB: NSObject {
     }
     /**
     WHERE文に使える形のSQL条件節を作る
-    :param: condition 条件
-    :returns: SQL条件節
+    - parameter condition: 条件
+    - returns: SQL条件節
     */
     public static func whereCruise(condition:[String:AnyObject?], inout params:[AnyObject?]) -> String {
         var sqla = ["1=1"]
-        var first = true
         for (key, value) in condition {
             sqla.append(" AND ")
             if (key.eSub(0, len: 1) == "?") {
                 sqla.append(eS(value!))
             } else {
                 let elems = key.eSplit(" ")
-                var col = elems[0]
-                var op = elems.count == 1 ? "=" : elems[1]
+                let col = elems[0]
+                let op = elems.count == 1 ? "=" : elems[1]
                 sqla.append(" \(col) \(op) ? ")
                 params.append(value)
             }
         }
-        return join("", sqla)
+        return sqla.joinWithSeparator("")
     }
     
     /**
     エラーメッセージ
-    :param: errorCode エラーコード
-    :returns: メッセージ
+    - parameter errorCode: エラーコード
+    - returns: メッセージ
     */
     private static func errorMessageFromCode(errorCode: Int32) -> String {
         

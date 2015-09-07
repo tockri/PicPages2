@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "F184D38F2A4C4EE5CD0CB4809665306CFCF165E4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "74EF8343C0AFCE8A40779F74BAE898CBD697DA7C" : 0,
+    "F184D38F2A4C4EE5CD0CB4809665306CFCF165E4" : 0,
+    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6FC61D51-9F65-4884-9E63-AC1FE57E4A74",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "74EF8343C0AFCE8A40779F74BAE898CBD697DA7C" : "src",
+    "F184D38F2A4C4EE5CD0CB4809665306CFCF165E4" : "github",
+    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : "srcZipzap\/zipzap"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PicPages2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "PicPages2.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:tockri\/PicPages2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "74EF8343C0AFCE8A40779F74BAE898CBD697DA7C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/pixelglow\/zipzap.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "82DF43EF5CA016D15C41E0AF1AF686E9973475B7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:tockri\/PicPages2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F184D38F2A4C4EE5CD0CB4809665306CFCF165E4"
+    }
+  ]
+}

@@ -12,25 +12,25 @@ extension String {
     // ファイル名を返す
     var eFilename : String {
         get {
-            return lastPathComponent
+            return (self as NSString).lastPathComponent
         }
     }
     // ディレクトリを返す
     var eDirname : String {
         get {
-            return stringByDeletingLastPathComponent
+            return (self as NSString).stringByDeletingLastPathComponent
         }
     }
     // ディレクトリと拡張子を除く
     var eBasename : String {
         get {
-            return eFilename.stringByDeletingPathExtension
+            return (eFilename as NSString).stringByDeletingPathExtension
         }
     }
     // 拡張子を返す
     var eExt :String {
         get {
-            return pathExtension
+            return (self as NSString).pathExtension
         }
     }
     // cStringUsingEncodingのエイリアス
@@ -47,12 +47,12 @@ extension String {
     }
     // stringByAppendintなんたらのエイリアス
     func eAddPath(path:String) -> String {
-        return stringByAppendingPathComponent(path)
+        return (self as NSString).stringByAppendingPathComponent(path)
     }
     // substring
     func eSub(from:Int, len:Int) -> String {
-        let start = advance(self.startIndex, from)
-        let r = Range<String.Index>(start:start, end:advance(start, len))
+        let start = self.startIndex.advancedBy(from)
+        let r = Range<String.Index>(start:start, end:start.advancedBy(len))
         return substringWithRange(r)
     }
     
@@ -62,15 +62,12 @@ extension String {
     }
     // 正規表現マッチ
     func eMatch(pattern: String) -> [String] {
-        let options = NSRegularExpressionOptions.CaseInsensitive
-            | NSRegularExpressionOptions.DotMatchesLineSeparators
-        var error : NSError?
-        let regexp = NSRegularExpression(pattern: pattern,
-            options: options,
-            error: &error)!
+        let options: NSRegularExpressionOptions = [NSRegularExpressionOptions.CaseInsensitive, NSRegularExpressionOptions.DotMatchesLineSeparators]
+        let regexp = try! NSRegularExpression(pattern: pattern,
+            options: options)
         let match = regexp.firstMatchInString(self,
-            options: nil,
-            range: NSMakeRange(0, count(self)))
+            options: [],
+            range: NSMakeRange(0, self.characters.count))
         var ret : [String] = []
         if (match != nil) {
             for i in 0 ..< match!.numberOfRanges {

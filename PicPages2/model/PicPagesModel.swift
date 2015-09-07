@@ -28,7 +28,7 @@ class PicPagesModel : NSObject {
 
     /**
     コンストラクタ
-    :returns: インスタンス
+    - returns: インスタンス
     */
     private override init() {
         let cachePath = EG.cachePath("db/\(DBNAME)")

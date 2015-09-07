@@ -18,7 +18,6 @@ class RarArchiver: Archiver {
     アーカイブを展開する
     */
     override func extract() -> Bool {
-        var err:NSError? = nil
         let filePath = folder.realPath!.eAddPath(folder.originalName!)
         let ur = Unrar4iOS()
         ur.unrarOpenFile(filePath)
@@ -40,8 +39,8 @@ class RarArchiver: Archiver {
     }
     /**
     アーカイブのリストを取得してディレクトリ構成を作る
-    :param: ur Unrar4iOS
-    :returns: ディレクトリ→ファイル名のツリー
+    - parameter ur: Unrar4iOS
+    - returns: ディレクトリ→ファイル名のツリー
     */
     private func inspect(ur:Unrar4iOS) -> [String:[String]]? {
         let files = ur.unrarListFiles()
@@ -61,7 +60,7 @@ class RarArchiver: Archiver {
             }
         }
         for dir in tree.keys {
-            sort(&tree[dir]!)
+            (tree[dir]!).sortInPlace()
         }
         
         Logger.debug(tree, message: "extracting")
@@ -70,11 +69,11 @@ class RarArchiver: Archiver {
 
     /**
     リストを元に実際に展開する
-    :param: tree ディレクトリ→ファイル名のツリー
-    :param: ur   Unrar4iOS
+    - parameter tree: ディレクトリ→ファイル名のツリー
+    - parameter ur:   Unrar4iOS
     */
     private func makeup(tree:[String:[String]], ur:Unrar4iOS) {
-        let dirs = tree.keys.array
+        let dirs = Array(tree.keys)
         if (dirs.count == 1) {
             makeupBook(folder, dir: dirs[0], files: tree[dirs[0]]!, ur: ur)
         } else {
@@ -90,10 +89,10 @@ class RarArchiver: Archiver {
     }
     /**
     フォルダ1つ分の処理
-    :param: f     フォルダ
-    :param: dir   ディレクトリ名
-    :param: files ファイル名リスト
-    :param: ur    Unrar4iOS
+    - parameter f:     フォルダ
+    - parameter dir:   ディレクトリ名
+    - parameter files: ファイル名リスト
+    - parameter ur:    Unrar4iOS
     */
     private func makeupBook(f:Folder, dir:String, files:[String], ur:Unrar4iOS) {
         f.isBook = true
@@ -105,7 +104,6 @@ class RarArchiver: Archiver {
         for fn in files {
             autoreleasepool({ () -> () in
                 let dstPath = folder.realPath!.eAddPath(String(format: "%05d", page))
-                var err:NSError? = nil
                 let data:NSData = ur.extractStream(fn)
                 if (FileUtil.exists(dstPath)) {
                     FileUtil.rm(dstPath)

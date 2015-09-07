@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8C0F149A1B7DE11E00EBE0F7 /* libzipzap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6492321B7DC356001741D8 /* libzipzap.a */; };
-		8C39F68D1B930ECC008EA16E /* testdata in Resources */ = {isa = PBXBuildFile; fileRef = 96561EA61B6C84BD00F231FA /* testdata */; };
 		8C6491811B7DC1C9001741D8 /* ConfigPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6491801B7DC1C9001741D8 /* ConfigPane.swift */; };
 		8C6491C01B7DC23D001741D8 /* About.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8C6491831B7DC23D001741D8 /* About.txt */; };
 		8C6491C11B7DC23D001741D8 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6491851B7DC23D001741D8 /* GCDAsyncSocket.m */; };
@@ -620,7 +619,9 @@
 		96561DE71B6C673700F231FA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = sat;
 				TargetAttributes = {
 					96561DEE1B6C673700F231FA = {
@@ -689,7 +690,6 @@
 			files = (
 				96561DFA1B6C673700F231FA /* Main.storyboard in Resources */,
 				8C6491DB1B7DC23D001741D8 /* README.txt in Resources */,
-				8C39F68D1B930ECC008EA16E /* testdata in Resources */,
 				96561E371B6C6A2600F231FA /* Localizable.strings in Resources */,
 				8C6491D31B7DC23D001741D8 /* About.txt in Resources */,
 				96561DFF1B6C673700F231FA /* LaunchScreen.xib in Resources */,
@@ -859,6 +859,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -946,6 +947,7 @@
 					"$(PROJECT_DIR)/Unrar4iOS/build",
 				);
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.tkr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "15e2b959-13bb-419b-b677-9c27a72add6e";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PROJECT)/PicPages2-Bridging-Header.h";
@@ -975,6 +977,7 @@
 					"$(PROJECT_DIR)/Unrar4iOS/build",
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.tkr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b82a8ffb-a398-46d3-a97d-b94491d86bcb";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PROJECT)/PicPages2-Bridging-Header.h";
@@ -995,6 +998,7 @@
 				);
 				INFOPLIST_FILE = PicPages2Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.tkr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PROJECT)Tests/PicPages2Tests-Bridging-Header.h";
 			};
@@ -1010,6 +1014,7 @@
 				);
 				INFOPLIST_FILE = PicPages2Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "net.tkr.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b82a8ffb-a398-46d3-a97d-b94491d86bcb";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/$(PROJECT)Tests/PicPages2Tests-Bridging-Header.h";

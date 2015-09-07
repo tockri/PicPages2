@@ -91,7 +91,7 @@ class PicPagesTests: XCTestCase {
         
         // ORDERなし
         records = db.selectRecords("testTable", condition:["bool":true])
-        println("\(records)")
+        print("\(records)")
         XCTAssert(records.count == 2, "orderなし")
         
     }

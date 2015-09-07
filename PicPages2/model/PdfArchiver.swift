@@ -21,12 +21,12 @@ class PdfArchiver: Archiver {
     override func extract() -> Bool {
         let filePath = folder.realPath!.eAddPath(folder.originalName!)
         let fileUrl = NSURL(fileURLWithPath: filePath)
-        var doc = CGPDFDocumentCreateWithURL(fileUrl)
+        let doc = CGPDFDocumentCreateWithURL(fileUrl)
         let pageCount = CGPDFDocumentGetNumberOfPages(doc)
         folder.pageCount = pageCount
         if (pageCount >= 1) {
             for var p = 1; p <= pageCount; p++ {
-                if (!extractPage(doc, pageNum: p)) {
+                if (!extractPage(doc!, pageNum: p)) {
                     break;
                 }
             }
@@ -40,14 +40,14 @@ class PdfArchiver: Archiver {
     
     /**
     1ページを展開する
-    :param: doc  PDFファイル
-    :param: page ページ番号
+    - parameter doc:  PDFファイル
+    - parameter page: ページ番号
     */
     private func extractPage(doc:CGPDFDocumentRef, pageNum:Int) -> Bool {
         var result:Bool = false
         autoreleasepool { () -> () in
             let page = CGPDFDocumentGetPage(doc, pageNum)
-            let rect:CGRect = CGPDFPageGetBoxRect(page, kCGPDFTrimBox);
+            let rect:CGRect = CGPDFPageGetBoxRect(page, CGPDFBox.TrimBox);
             let size:CGSize = rect.size
             if (size.width != prevSize.width || size.height != prevSize.height) {
                 if (prevSize.width > 0) {
@@ -71,7 +71,7 @@ class PdfArchiver: Archiver {
             // JPEGファイルに書き出す
             let data = UIImageJPEGRepresentation(image, 0.9)
             let dstPath = folder.realPath!.eAddPath(String(format: "%05d", pageNum))
-            result = data.writeToFile(dstPath, atomically: true)
+            result = data!.writeToFile(dstPath, atomically: true)
         }
         return result
     }

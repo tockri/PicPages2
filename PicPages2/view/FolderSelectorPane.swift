@@ -49,7 +49,7 @@ class FolderSelectorPane: PaneBase, UITableViewDataSource, UITableViewDelegate {
         if (isToAppend(folder)) {
             nodeList.append(Node(f: folder, d: depth))
         }
-        for cf in folder.getChildFolders(logined: app.isLogined) {
+        for cf in folder.getChildFolders(app.isLogined) {
             appendToChildren(cf, depth: depth + 1)
         }
     }
@@ -82,14 +82,14 @@ class FolderSelectorPane: PaneBase, UITableViewDataSource, UITableViewDelegate {
         cell.nameLabel.text = node.folder.name
         // レイアウトを修正してdepthを表現する
         var toRemove: NSLayoutConstraint!
-        for c in cell.contentView.constraints() {
+        for c in cell.contentView.constraints {
             if (c.firstItem === cell.icon
                 && c.firstAttribute == NSLayoutAttribute.Leading
                 && c.secondItem! === cell.contentView
                 && c.secondAttribute == NSLayoutAttribute.LeadingMargin)
             {
                 // 削除する
-                toRemove = c as! NSLayoutConstraint
+                toRemove = c 
                 break
             }
         }

@@ -19,7 +19,7 @@ protocol FolderDelegate {
     func importCompleted(imported:Bool);
     /**
     キャッシュが終わった時呼ばれる
-    :param: folder キャッシュし終わったFolder
+    - parameter folder: キャッシュし終わったFolder
     */
     func cacheCompleted(folder:Folder);
 }
@@ -109,7 +109,7 @@ class Folder : NSObject {
         if (record["folder_id"] == nil) {
             return 0
         } else {
-            return record["folder_id"]!!.toInt()!
+            return Int(record["folder_id"]!!)!
         }
     }
     // フォルダの名前
@@ -118,7 +118,7 @@ class Folder : NSObject {
             return record["name"]!
         }
         set {
-            var v = newValue ?? Optional<String>()
+            let v = newValue ?? Optional<String>()
             record["name"] = v
             change["name"] = v
         }
@@ -129,7 +129,7 @@ class Folder : NSObject {
             return record["original_name"]!
         }
         set {
-            var v = newValue ?? Optional<String>()
+            let v = newValue ?? Optional<String>()
             record["original_name"] = v
             change["original_name"] = v
         }
@@ -138,7 +138,7 @@ class Folder : NSObject {
     var parentFolder: Folder? {
         if (parent == nil && id > 1) {
             let pathElems = path.eSplit("/")
-            let parentId = pathElems[pathElems.count - 1].toInt()!
+            let parentId = Int(pathElems[pathElems.count - 1])!
             parent = Folder.folderById(parentId)
         }
         return parent
@@ -149,7 +149,7 @@ class Folder : NSObject {
             return record["path"]!!
         }
         set {
-            var v = newValue ?? Optional<String>()
+            let v = newValue ?? Optional<String>()
             record["path"] = v
             change["path"] = v
         }
@@ -160,14 +160,14 @@ class Folder : NSObject {
             return record["real_name"]!
         }
         set {
-            var v = newValue ?? Optional<String>()
+            let v = newValue ?? Optional<String>()
             record["real_name"] = v
             change["real_name"] = v
         }
     }
     // コンテンツキャッシュディレクトリの実パス
     var realPath: String? {
-        var rn = realName
+        let rn = realName
         if (rn != nil && rn != "") {
             return EG.cachePath("book").eAddPath(rn!)
         } else {
@@ -181,7 +181,7 @@ class Folder : NSObject {
             return record["is_book"]! == "1"
         }
         set {
-            var v = newValue ? "1" : "0"
+            let v = newValue ? "1" : "0"
             record["is_book"] = v
             change["is_book"] = v
         }
@@ -192,7 +192,7 @@ class Folder : NSObject {
             return record["is_movable"]! == "1"
         }
         set {
-            var v = newValue ? "1" : "0"
+            let v = newValue ? "1" : "0"
             record["is_movable"] = v
             change["is_movable"] = v
         }
@@ -200,11 +200,11 @@ class Folder : NSObject {
     // ログインが必要である
     var loginCondition: LoginCondition {
         get {
-            let r:Int = record["login_condition"]??.toInt() ?? 0
+            let r:Int = Int(record["login_condition"]!!) ?? 0
             return LoginCondition(rawValue: r)!
         }
         set {
-            var v = eS(newValue.rawValue)
+            let v = eS(newValue.rawValue)
             record["login_condition"] = v
             change["login_condition"] = v
         }
@@ -221,7 +221,7 @@ class Folder : NSObject {
     // このfolderに設定されているページめくり方向
     var pageOrientation: PageOrientation {
         get {
-            let r:Int = record["page_orientation"]??.toInt() ?? 0
+            let r:Int = Int(record["page_orientation"]! ?? "0") ?? 0
             return PageOrientation(rawValue: r)!
         }
         set {
@@ -241,10 +241,10 @@ class Folder : NSObject {
     // 最後に読んだページ
     var lastRead: Int {
         get {
-            return record["last_read"]??.toInt() ?? 1
+            return  Int(record["last_read"]! ?? "1") ?? 1
         }
         set {
-            var v = eS(newValue)
+            let v = eS(newValue)
             record["last_read"] = v
             change["last_read"] = v
         }
@@ -252,10 +252,10 @@ class Folder : NSObject {
     // ページ数
     var pageCount: Int {
         get {
-            return record["page_count"]??.toInt() ?? 0
+            return Int(record["page_count"]! ?? "0") ?? 0
         }
         set {
-            var v = eS(newValue)
+            let v = eS(newValue)
             record["page_count"] = v
             change["page_count"] = v
         }
@@ -263,10 +263,11 @@ class Folder : NSObject {
     /// キャッシュ生成完了しているかどうか
     var cacheCompleted: Bool {
         get {
-            return record["cache_completed"]! == "1"
+            let c = record["cache_completed"]!
+            return c == "1"
         }
         set {
-            var v = newValue ? "1" : "0"
+            let v = newValue ? "1" : "0"
             record["cache_completed"] = v
             change["cache_completed"] = v
         }
@@ -282,15 +283,15 @@ class Folder : NSObject {
     
     /**
     新しいフォルダを作成する
-    :param: parentFolder    親フォルダ
-    :param: name            フォルダ名
-    :param: realName        ファイルの場合、新しい物理名を指定
-    :param: originalName    ファイルの場合、元のファイル名を指定
-    :param: isBook          直下にディレクトリがない場合はtrueを指定
-    :param: isMovable       アーカイブ中のフォルダの場合falseを指定
-    :param: loginCondition  指定しない（.Inherit）
-    :param: pageOrientation 指定しない（.Inherit）
-    :returns: 新しいフォルダ。未セーブ
+    - parameter parentFolder:    親フォルダ
+    - parameter name:            フォルダ名
+    - parameter realName:        ファイルの場合、新しい物理名を指定
+    - parameter originalName:    ファイルの場合、元のファイル名を指定
+    - parameter isBook:          直下にディレクトリがない場合はtrueを指定
+    - parameter isMovable:       アーカイブ中のフォルダの場合falseを指定
+    - parameter loginCondition:  指定しない（.Inherit）
+    - parameter pageOrientation: 指定しない（.Inherit）
+    - returns: 新しいフォルダ。未セーブ
     */
     private init(parentFolder:Folder, name:String, realName:String? = nil,
         originalName:String? = nil, isBook:Bool = false, isMovable:Bool = true,
@@ -317,8 +318,8 @@ class Folder : NSObject {
     //MARK: - private methods
     /**
     Folder配列を返す
-    :param: condition 検索条件
-    :returns: Folderオブジェクト配列
+    - parameter condition: 検索条件
+    - returns: Folderオブジェクト配列
     */
     private func getFolders(condition:[String:AnyObject?], order:String = "name") -> [Folder] {
         var ret: [Folder] = []
@@ -349,7 +350,7 @@ class Folder : NSObject {
         }
         importing = true
         let dir = EG.docPath("")
-        var files = FileUtil.tree(dir)
+        let files = FileUtil.tree(dir)
         if (files.count == 0) {
             importing = false
             delegate?.importCompleted(false)
@@ -362,7 +363,6 @@ class Folder : NSObject {
                 if (Archiver.isArchivable(path)) {
                     let realName = NSDate().eFormat("yyyyMMddHHmmss") + eS(Int(rand() % 100))
                     let origName = file
-                    let ext = file.eExt
                     let folder = Folder(parentFolder: self, name: origName.eBasename, realName: realName,
                         originalName: origName, isBook: true)
                     let realPath = folder.realPath!
@@ -419,8 +419,8 @@ class Folder : NSObject {
     
     /**
     子フォルダを作る
-    :param: name フォルダ名
-    :returns: フォルダインスタンス
+    - parameter name: フォルダ名
+    - returns: フォルダインスタンス
     */
     func createChild(name:String) -> Folder {
         return Folder(parentFolder: self, name: name)
@@ -438,8 +438,8 @@ class Folder : NSObject {
     
     /**
     子フォルダのうちBookでないものの配列を生成して返す
-    :param: logined ログイン中はtrueを指定する。
-    :returns: フォルダ配列
+    - parameter logined: ログイン中はtrueを指定する。
+    - returns: フォルダ配列
     */
     func getChildFolders(logined:Bool = false) -> [Folder] {
         var condition:[String:AnyObject?] = [
@@ -454,9 +454,9 @@ class Folder : NSObject {
     
     /**
     子フォルダの配列を生成して返す
-    :param: logined 現在ログイン中の場合trueを指定する。falseが指定された場合、要ログインの
+    - parameter logined: 現在ログイン中の場合trueを指定する。falseが指定された場合、要ログインの
     フォルダを除いた一覧を返す。
-    :returns: フォルダ配列
+    - returns: フォルダ配列
     */
     func getChildren(logined:Bool = false) -> [Folder] {
         var condition:[String:AnyObject?] = [
@@ -510,8 +510,8 @@ class Folder : NSObject {
     
     /**
     先祖フォルダかどうかを返す
-    :param: other 対象フォルダ
-    :returns: このフォルダが対象フォルダの先祖であればtrue
+    - parameter other: 対象フォルダ
+    - returns: このフォルダが対象フォルダの先祖であればtrue
     */
     func isAncestorOf(other: Folder) -> Bool {
         let rs = other.path.rangeOfString("/\(id)/")
@@ -520,7 +520,7 @@ class Folder : NSObject {
     
     /**
     フォルダを移動する
-    :param: dst 移動先フォルダ
+    - parameter dst: 移動先フォルダ
     */
     func moveTo(dst: Folder) {
         if (id == 1) {
@@ -543,8 +543,8 @@ class Folder : NSObject {
     
     /**
     IDを指定してFolderオブジェクトを生成して返す
-    :param: id ID
-    :returns: インスタンス
+    - parameter id: ID
+    - returns: インスタンス
     */
     class func folderById(id: Int) -> Folder {
         let record = PicPagesModel.Db.selectRow("folder", condition: ["folder_id":id])!

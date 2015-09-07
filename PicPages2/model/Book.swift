@@ -25,8 +25,8 @@ class Book : NSObject {
     
     /**
     画面サイズに合わせてリサイズする
-    :param: img 画像
-    :returns: リサイズ後画像
+    - parameter img: 画像
+    - returns: リサイズ後画像
     */
     private func resize(img:UIImage) -> UIImage {
         // キャンバスサイズ
@@ -70,7 +70,7 @@ class Book : NSObject {
     
     /**
     サムネイル画像を返す
-    :returns: 画像
+    - returns: 画像
     */
     func thumbImage() -> UIImage? {
         let thumbPath = folder.realPath!.eAddPath("thumb")
@@ -79,8 +79,8 @@ class Book : NSObject {
             if (img == nil) {
                 return nil
             }
-            let thumb = img?.eResize(CGSize(width: 300, height: 300))
-            let data = UIImageJPEGRepresentation(thumb, 0.9)
+            let thumb = img!.eResize(CGSize(width: 300, height: 300))
+            let data = UIImageJPEGRepresentation(thumb, 0.9)!
             data.writeToFile(thumbPath, atomically: false)
             return thumb
         } else {

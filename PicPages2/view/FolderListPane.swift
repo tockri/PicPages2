@@ -36,7 +36,7 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
         }
         titleItem.title = folder.name
         let app = AppDelegate.getInstance()
-        children = folder.getChildren(logined: app.isLogined)
+        children = folder.getChildren(app.isLogined)
     }
     
     private func reloadTable() {
@@ -68,7 +68,7 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
     // 選択、選択解除時にmoveとdeleteのenableを切り替える
     private func updateButtonsOnSelect() {
         var selected: Bool
-        if (table.indexPathsForSelectedRows()?.count > 0) {
+        if (table.indexPathsForSelectedRows?.count > 0) {
             selected = true
         } else {
             selected = false
@@ -81,10 +81,10 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
     // 選択されているフォルダ一覧を返す
     func getSelectedFolders() -> [Folder] {
         var ret: [Folder] = []
-        let sel = table.indexPathsForSelectedRows()
+        let sel = table.indexPathsForSelectedRows
         if (sel != nil && (children?.count ?? 0) > 0) {
             for s in sel! {
-                let ip = s as! NSIndexPath
+                let ip = s 
                 ret.append(children![ip.row])
             }
         }
@@ -145,7 +145,7 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
     
     // 選択フォルダを移動する
     @IBAction func moveFolders(sender: AnyObject) {
-        if (table.indexPathsForSelectedRows()?.count > 0) {
+        if (table.indexPathsForSelectedRows?.count > 0) {
             showCoverViewController("FolderSelectorPane")
         }
     }
@@ -294,14 +294,14 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
             pane.folder = targetFolder
         case "Book":
             // 本の表示
-            var pane = segue.destinationViewController as! BookPane
+            let pane = segue.destinationViewController as! BookPane
             pane.folder = targetFolder
         case "Config", "Config2", "FolderConfig":
             // フォルダ設定
-            var pane = segue.destinationViewController as! ConfigPane
+            let pane = segue.destinationViewController as! ConfigPane
             pane.folder = targetFolder
         case "FolderConfig":
-            var pane = segue.destinationViewController as! ConfigPane
+            let pane = segue.destinationViewController as! ConfigPane
             pane.folder = folder
         default:
             break;
@@ -309,7 +309,7 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
     }
     
     // 画面遷移するかどうか
-    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         // 編集中は遷移しない
         if (table.editing) {
             return false
@@ -331,16 +331,16 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
     
     // セルの内容
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var fol = children![indexPath.row]
+        let fol = children![indexPath.row]
         if (!fol.cacheCompleted) {
-            var cell = tableView.dequeueReusableCellWithIdentifier("LoadingCell") as! LoadingCell
+            let cell: LoadingCell! = tableView.dequeueReusableCellWithIdentifier("LoadingCell") as! LoadingCell
             cell.label.text = fol.name
             return cell
         } else if (fol.isBook) {
-            var cell = tableView.dequeueReusableCellWithIdentifier("BookCell") as! BookCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("BookCell") as! BookCell
             cell.label.text = fol.name
             cell.folder = fol
-            var book = Book(folder: fol)
+            let book = Book(folder: fol)
             cell.thumbImage.image = book.thumbImage()
             if (fol.loginCondition == .Private) {
                 cell.lockIcon.hidden = false
@@ -349,7 +349,7 @@ class FolderListPane: AbstractFolderPane, UITableViewDataSource, UITableViewDele
             }
             return cell
         } else {
-            var cell = tableView.dequeueReusableCellWithIdentifier("FolderCell") as! FolderCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("FolderCell") as! FolderCell
             cell.label.text = fol.name
             cell.folder = fol
             if (fol.loginCondition == .Private) {

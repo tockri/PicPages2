@@ -23,7 +23,7 @@ class PassSetPane: PaneBase {
         if (pass1Text.text != "") {
             if (pass1Text.text == pass2Text.text) {
                 let app = AppDelegate.getInstance()
-                app.setPassCode(pass1Text.text)
+                app.setPassCode(pass1Text.text!)
                 dismissCoveringViewController()
             } else {
                 errorMessageLabel.hidden = false
