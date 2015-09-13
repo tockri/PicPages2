@@ -10,10 +10,15 @@ import UIKit
 /// PDFをページ分解するクラス
 class PdfArchiver: Archiver {
     private let folder:Folder
-    private var prevSize:CGSize = CGSizeMake(0, 0)
+    private let minimumSize:CGSize
     
     init(folder:Folder) {
         self.folder = folder
+        let ms = UIScreen.mainScreen()
+        let sz = ms.bounds.size
+        let sc = ms.scale * 2
+        minimumSize = CGSize(width: sz.width * sc, height: sz.height * sc)
+
     }
     /**
     アーカイブを展開する
@@ -30,7 +35,6 @@ class PdfArchiver: Archiver {
                     break;
                 }
             }
-            UIGraphicsEndImageContext()
         }
         folder.cacheCompleted = true
         folder.save()
@@ -47,26 +51,31 @@ class PdfArchiver: Archiver {
         var result:Bool = false
         autoreleasepool { () -> () in
             let page = CGPDFDocumentGetPage(doc, pageNum)
-            let rect:CGRect = CGPDFPageGetBoxRect(page, CGPDFBox.TrimBox);
-            let size:CGSize = rect.size
-            if (size.width != prevSize.width || size.height != prevSize.height) {
-                if (prevSize.width > 0) {
-                    UIGraphicsEndImageContext()
-                }
-                UIGraphicsBeginImageContext(size)
-                let context = UIGraphicsGetCurrentContext()
-                // 反転する
-                CGContextTranslateCTM(context, 0, size.height);
-                CGContextScaleCTM(context, 1.0, -1.0);
-                CGContextSaveGState(context);
-                
-                prevSize = size
+            let rect:CGRect = CGPDFPageGetBoxRect(page, CGPDFBox.TrimBox)
+            let origSize = rect.size
+            let size:CGSize
+            let scale:CGFloat
+            if (origSize.width < minimumSize.width && origSize.height < minimumSize.height) {
+                scale = max(minimumSize.width / origSize.width, minimumSize.height / origSize.height)
+                size = CGSizeMake(origSize.width * scale, origSize.height * scale)
+            } else {
+                scale = 1
+                size = origSize
             }
+            
+            UIGraphicsBeginImageContext(size)
             let context = UIGraphicsGetCurrentContext()
+            // 反転する
+            CGContextTranslateCTM(context, 0, size.height);
+            CGContextScaleCTM(context, scale, -scale);
+            CGContextSaveGState(context);
             
             // UIImageに書き出す
             CGContextDrawPDFPage(context, page);
+            
+            
             let image:UIImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext()
             
             // JPEGファイルに書き出す
             let data = UIImageJPEGRepresentation(image, 0.9)
